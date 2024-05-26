@@ -87,3 +87,15 @@ export const updateCorrectAnswersByQuizId = async (
 
   return correctAnswers;
 };
+
+export const searchQuizes = async (text: string) => {
+  await delay();
+
+  const quizes: Quiz[] =
+    JSON.parse(localStorage.getItem('quizes') || JSON.stringify([])) || [];
+  const searchedQuizes = quizes.filter(quiz => {
+    return quiz.title.includes(text.trim());
+  });
+
+  return searchedQuizes;
+};

@@ -101,6 +101,15 @@ export const removeQuizById = createAsyncThunk(
   },
 );
 
+export const searchQuizes = createAsyncThunk(
+  'quiz/searchQuizes',
+  async ({ text }: { text: string }) => {
+    const res = await quizApi.searchQuizes(text);
+
+    return res;
+  },
+);
+
 const quizSlice = createSlice({
   name: 'quiz',
   initialState,
@@ -261,6 +270,9 @@ const quizSlice = createSlice({
     });
     builder.addCase(updateQuizById.fulfilled, (state, action) => {
       state.data = action.payload;
+    });
+    builder.addCase(searchQuizes.fulfilled, (state, action) => {
+      state.quizes = action.payload;
     });
   },
 });
