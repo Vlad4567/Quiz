@@ -89,7 +89,15 @@ export const QuestionForm: React.FC<Props> = ({
             className="flex flex-col gap-4
             rounded-2xl border border-icons p-2"
           >
-            <h5 className="font-bold">{question.text}</h5>
+            <div className="flex justify-between">
+              <h5 className="font-bold">{question.text}</h5>
+              <h6>
+                {question.answers.filter(answer => answer.isCorrect).length ===
+                1
+                  ? 'One answer'
+                  : 'Few answers'}
+              </h6>
+            </div>
 
             <div className="flex flex-col gap-2">
               {question.answers.map(

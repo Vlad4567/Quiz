@@ -4,6 +4,7 @@ import { Answer, Question } from '../types/quiz';
 import { useAppDispatch } from '../app/hooks';
 import * as quizSlice from '../features/quizSlice';
 import basketImg from '../images/icon-basket.svg';
+import { useRef } from 'react';
 
 interface Props {
   type: 'edit' | 'view';
@@ -19,6 +20,9 @@ export const AnswerForm: React.FC<Props> = ({
   isLast,
 }) => {
   const dispatch = useAppDispatch();
+  const isOneAnswer = useRef(
+    question.answers.filter(item => item.isCorrect).length === 1,
+  );
 
   const handleIsCorrectChange = () => {
     if (answer.errors.isCorrect) {
@@ -56,15 +60,50 @@ export const AnswerForm: React.FC<Props> = ({
   };
 
   const handleIsChoosedChange = () => {
-    dispatch(
-      quizSlice.updateAnswer({
-        questionId: question.id,
-        answerId: answer.id,
-        answer: {
-          isChoosed: !answer.isChoosed,
-        },
-      }),
-    );
+    if (isOneAnswer.current) {
+      if (answer.isChoosed) {
+        dispatch(
+          quizSlice.updateAnswer({
+            questionId: question.id,
+            answerId: answer.id,
+            answer: {
+              isChoosed: !answer.isChoosed,
+            },
+          }),
+        );
+      } else {
+        question.answers.forEach(item => {
+          dispatch(
+            quizSlice.updateAnswer({
+              questionId: question.id,
+              answerId: item.id,
+              answer: {
+                isChoosed: false,
+              },
+            }),
+          );
+        });
+        dispatch(
+          quizSlice.updateAnswer({
+            questionId: question.id,
+            answerId: answer.id,
+            answer: {
+              isChoosed: !answer.isChoosed,
+            },
+          }),
+        );
+      }
+    } else {
+      dispatch(
+        quizSlice.updateAnswer({
+          questionId: question.id,
+          answerId: answer.id,
+          answer: {
+            isChoosed: !answer.isChoosed,
+          },
+        }),
+      );
+    }
   };
 
   const handleAnswerTextChange = (
