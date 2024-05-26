@@ -15,6 +15,7 @@ export const Router: React.FC = () => {
             <Route index element={<HomePage />} />
             <Route path="home" element={<Navigate to="/" />} />
             <Route path="quiz/:id" element={<QuizPage type="view" />} />
+            <Route path="edit-quiz/:id" element={<QuizPage type="edit" />} />
             <Route path="new-quiz" element={<QuizPage type="create" />} />
             <Route path="*" element={<NotFoundPage />} />
           </Route>

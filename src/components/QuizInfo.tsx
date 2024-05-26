@@ -4,7 +4,7 @@ import * as quizSlice from '../features/quizSlice';
 import { Textarea } from './Textarea';
 
 interface Props {
-  type: 'edit' | 'view';
+  type: 'edit' | 'view' | 'create';
 }
 
 export const QuizInfo: React.FC<Props> = ({ type }) => {

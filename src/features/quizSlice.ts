@@ -81,6 +81,15 @@ export const updateCorrectAnswersByQuizId = createAsyncThunk(
   },
 );
 
+export const updateQuizById = createAsyncThunk(
+  'quiz/updateQuizById',
+  async ({ id, quiz }: { id: number; quiz: Quiz }) => {
+    const res = await quizApi.updateQuizById(id, quiz);
+
+    return res;
+  },
+);
+
 export const removeQuizById = createAsyncThunk(
   'quiz/removeQuizById',
   async (id: number, thunkApi) => {
@@ -249,6 +258,9 @@ const quizSlice = createSlice({
     });
     builder.addCase(updateCorrectAnswersByQuizId.fulfilled, (state, action) => {
       state.data.correctAnswers = action.payload;
+    });
+    builder.addCase(updateQuizById.fulfilled, (state, action) => {
+      state.data = action.payload;
     });
   },
 });

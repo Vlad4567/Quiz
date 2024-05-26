@@ -8,7 +8,7 @@ import { useDocumentTitle } from 'usehooks-ts';
 import { websiteName } from '../helpers/variables';
 
 interface Props {
-  type: 'create' | 'view';
+  type: 'create' | 'view' | 'edit';
 }
 
 export const QuizPage: React.FC<Props> = ({ type }) => {
@@ -24,6 +24,9 @@ export const QuizPage: React.FC<Props> = ({ type }) => {
 
   const renderHeaderQuizTitle = () => {
     switch (type) {
+      case 'edit':
+        return 'Edit quiz';
+
       default:
         return 'New quiz';
     }
@@ -111,11 +114,19 @@ export const QuizPage: React.FC<Props> = ({ type }) => {
     });
 
     if (!hasErrors) {
-      dispatch(quizSlice.createQuiz(data))
-        .unwrap()
-        .then(() => {
-          navigate('/');
-        });
+      if (type === 'create') {
+        dispatch(quizSlice.createQuiz(data))
+          .unwrap()
+          .then(() => {
+            navigate('/');
+          });
+      } else if (type === 'edit') {
+        dispatch(quizSlice.updateQuizById({ id: +(id ?? 0), quiz: data }))
+          .unwrap()
+          .then(() => {
+            navigate('/');
+          });
+      }
     }
   };
 
@@ -187,7 +198,7 @@ export const QuizPage: React.FC<Props> = ({ type }) => {
   useDocumentTitle(data.title || websiteName);
 
   useEffect(() => {
-    if (type === 'view') {
+    if (type === 'view' || type === 'edit') {
       dispatch(quizSlice.loadQuizById(+(id ?? 0)));
     }
 
@@ -197,6 +208,7 @@ export const QuizPage: React.FC<Props> = ({ type }) => {
   }, [dispatch, id, type]);
 
   switch (type) {
+    case 'edit':
     case 'create':
       return (
         <main
@@ -232,7 +244,7 @@ export const QuizPage: React.FC<Props> = ({ type }) => {
               hover:[background:_none]"
               onClick={handleCreateQuiz}
             >
-              Create quiz
+              {type == 'create' ? 'Create quiz' : 'Save changes'}
             </button>
           )}
         </main>

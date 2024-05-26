@@ -49,6 +49,24 @@ export const removeQuizById = async (id: number) => {
   return true;
 };
 
+export const updateQuizById = async (id: number, newQuiz: Quiz) => {
+  await delay();
+
+  const quizes: Quiz[] =
+    JSON.parse(localStorage.getItem('quizes') || JSON.stringify([])) || [];
+  const updatedQuizes = quizes.map(quiz => {
+    if (quiz.id === id) {
+      return newQuiz;
+    } else {
+      return quiz;
+    }
+  });
+
+  localStorage.setItem('quizes', JSON.stringify(updatedQuizes));
+
+  return newQuiz;
+};
+
 export const updateCorrectAnswersByQuizId = async (
   id: number,
   correctAnswers: number,

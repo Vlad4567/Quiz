@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { Quiz } from '../types/quiz';
 import basketImg from '../images/icon-basket.svg';
+import penImg from '../images/icon-pen.svg';
 import { useAppDispatch } from '../app/hooks';
 import * as quizSlice from '../features/quizSlice';
 
@@ -21,16 +22,34 @@ export const QuizCard: React.FC<Props> = ({ quiz }) => {
     dispatch(quizSlice.removeQuizById(quiz.id));
   };
 
+  const handleEditQuiz = () => {
+    navigate(`edit-quiz/${quiz.id}`);
+  };
+
   return (
     <div className="relative w-full max-w-[25rem]">
-      <button
-        type="button"
-        className="absolute right-5 top-5 aspect-square
-        rounded-2xl p-1 hover:bg-elements"
-        onClick={handleRemoveQuiz}
-      >
-        <img src={basketImg} alt="Remove quiz" />
-      </button>
+      <div className="absolute right-5 top-5 flex gap-2">
+        <button
+          type="button"
+          className="
+          rounded-2xl p-2 hover:bg-elements"
+          onClick={handleEditQuiz}
+        >
+          <img className="aspect-square h-6" src={penImg} alt="Edit quiz" />
+        </button>
+        <button
+          type="button"
+          className="aspect-square
+          rounded-2xl p-2 hover:bg-elements"
+          onClick={handleRemoveQuiz}
+        >
+          <img
+            className="aspect-square h-6"
+            src={basketImg}
+            alt="Remove quiz"
+          />
+        </button>
+      </div>
       <button
         onClick={() => navigate(`/quiz/${quiz.id}`)}
         type="button"
@@ -45,7 +64,7 @@ export const QuizCard: React.FC<Props> = ({ quiz }) => {
         <div className="ml-auto flex flex-col justify-end gap-2">
           <h5>{`Correct answers: ${quiz.correctAnswers} / ${quiz.questions.length}`}</h5>
           <h5 className="text-end">
-            {`question${questionsNum > 1 && 's'}: ${questionsNum}`}
+            {`question${questionsNum > 1 ? 's' : ''}: ${questionsNum}`}
           </h5>
         </div>
       </button>
