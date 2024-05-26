@@ -8,20 +8,25 @@ module.exports = {
       lg: '1200px',
       xl: '1440px',
     },
-    colors: {
-      'primary': '#313237',
-      'secondary': '#89939A',
-      'icons': '#B4BDC3',
-      'elements': '#E2E6E9',
-      'hoverBG': '#FAFBFC',
-      'white': '#FFFFFF',
-      'green': '#27AE60',
-      'red': '#EB5757',
+    extend: {
+      colors: {
+        'primary': '#313237',
+        'secondary': '#89939A',
+        'icons': '#B4BDC3',
+        'elements': '#E2E6E9',
+        'hoverBG': '#FAFBFC',
+        'white': '#FFFFFF',
+        'green': '#27AE60',
+        'red': '#EB5757',
+      },
+      height: {
+        '4': '1rem',
+        '22': '5.5rem',
+      },
+      borderWidth: {
+        '0.5': '0.125rem'
+      },
     },
-    height: {
-      '22': '5.5rem'
-    },
-    extend: {},
   },
   plugins: [],
 };

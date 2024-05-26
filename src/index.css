@@ -39,6 +39,11 @@
     @apply text-base;
   }
 
+  textarea,
+  input {
+    @apply outline-none;
+  }
+
   .content-padding {
     @apply mx-auto max-w-[theme('screens.lg')] px-4 md:px-6 lg:px-8;
   }
