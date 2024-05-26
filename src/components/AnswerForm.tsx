@@ -6,7 +6,7 @@ import * as quizSlice from '../features/quizSlice';
 import basketImg from '../images/icon-basket.svg';
 
 interface Props {
-  type: 'edit';
+  type: 'edit' | 'view';
   answer: Answer;
   question: Question;
   isLast: boolean;
@@ -50,6 +50,18 @@ export const AnswerForm: React.FC<Props> = ({
         question: {
           answersCount:
             question.answers.filter(item => item.isCorrect).length + 1,
+        },
+      }),
+    );
+  };
+
+  const handleIsChoosedChange = () => {
+    dispatch(
+      quizSlice.updateAnswer({
+        questionId: question.id,
+        answerId: answer.id,
+        answer: {
+          isChoosed: !answer.isChoosed,
         },
       }),
     );
@@ -157,6 +169,48 @@ export const AnswerForm: React.FC<Props> = ({
             </span>
             {answer.errors.isCorrect || answer.errors.text}
           </small>
+        </div>
+      );
+
+    case 'view':
+      return (
+        <div className="flex h-[2.75rem]">
+          <button
+            type="button"
+            className={twMerge(
+              `h-full min-w-6 overflow-hidden rounded-l-2xl
+                border-0.5 border-r-0 border-icons hover:border-primary`,
+              answer.isChoosed && 'border-primary',
+              answer.answer === 'incorrect' && 'border-red',
+              answer.answer === 'correct' && 'border-green',
+              answer.answer !== '' && 'pointer-events-none',
+            )}
+            onClick={handleIsChoosedChange}
+          >
+            <div
+              className={twMerge(
+                'h-full w-full',
+                answer.isChoosed && 'bg-primary',
+                answer.answer === 'incorrect' && 'bg-red',
+                answer.answer === 'correct' && 'bg-green',
+              )}
+            ></div>
+          </button>
+
+          <h5
+            className="h-full w-full resize-none overflow-hidden
+              rounded-2xl
+              rounded-l-none border-0.5 border-icons p-2.5
+              [background:_none] focus:border-primary focus:text-primary
+              disabled:border-none disabled:bg-icons"
+          >
+            {answer.text}
+          </h5>
+          {answer.isCorrect && answer.answer !== '' && (
+            <p className="pl-5 text-center font-bold text-green">
+              - Is correct answer
+            </p>
+          )}
         </div>
       );
 

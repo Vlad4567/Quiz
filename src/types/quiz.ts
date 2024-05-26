@@ -2,6 +2,8 @@ export interface Answer {
   id: number;
   text: string;
   isCorrect: boolean;
+  isChoosed: boolean;
+  answer: '' | 'submited' | 'correct' | 'incorrect';
   errors: AnswerError;
 }
 
@@ -27,6 +29,7 @@ export interface Quiz {
   title: string;
   description: string;
   questions: Question[];
+  correctAnswers: number;
   errors: QuizError;
 }
 

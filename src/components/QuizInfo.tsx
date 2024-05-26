@@ -63,11 +63,16 @@ export const QuizInfo: React.FC<Props> = ({ type }) => {
     case 'view':
       return (
         <div
-          className="flex flex-col gap-4
-          rounded-md border border-icons p-2"
+          className="flex h-[15rem] flex-col justify-between
+          rounded-2xl border border-icons p-2"
         >
-          <h3>{data.title}</h3>
-          <h4>{data.description}</h4>
+          <div className="flex flex-col gap-4">
+            <h3 className="font-bold">{data.title}</h3>
+            <h4>{data.description}</h4>
+          </div>
+          <div className="ml-auto flex flex-col gap-1">
+            <h5>{`Correct answers: ${data.correctAnswers} / ${data.questions.length}`}</h5>
+          </div>
         </div>
       );
 

@@ -16,6 +16,8 @@ const initialAnswer: Answer = {
   id: 0,
   text: '',
   isCorrect: false,
+  isChoosed: false,
+  answer: '',
   errors: { ...initialAnswerError },
 };
 
@@ -33,20 +35,58 @@ const initialQuestion: Question = {
 
 const initialState: {
   data: Quiz;
+  quizes: Quiz[];
 } = {
   data: {
     id: 0,
     title: '',
     description: '',
     questions: [],
+    correctAnswers: 0,
     errors: { title: '', description: '' },
   },
+  quizes: [],
 };
+
+export const loadQuizes = createAsyncThunk('quiz/loadQuizes', async () => {
+  const res = await quizApi.getQuizes();
+
+  return res;
+});
 
 export const createQuiz = createAsyncThunk(
   'quiz/createQuiz',
   async (quiz: Quiz) => {
     const res = await quizApi.createQuiz(quiz);
+
+    return res;
+  },
+);
+
+export const loadQuizById = createAsyncThunk(
+  'quiz/loadQuizById',
+  async (id: number) => {
+    const res = await quizApi.getQuizById(id);
+
+    return res;
+  },
+);
+
+export const updateCorrectAnswersByQuizId = createAsyncThunk(
+  'quiz/correctAnswersByQuizId',
+  async ({ id, correctAnswers }: { id: number; correctAnswers: number }) => {
+    const res = await quizApi.updateCorrectAnswersByQuizId(id, correctAnswers);
+
+    return res;
+  },
+);
+
+export const removeQuizById = createAsyncThunk(
+  'quiz/removeQuizById',
+  async (id: number, thunkApi) => {
+    const res = await quizApi.removeQuizById(id);
+
+    await thunkApi.dispatch(loadQuizes());
 
     return res;
   },
@@ -189,10 +229,26 @@ const quizSlice = createSlice({
         Object.assign(answer.errors, payload.answer);
       }
     },
+
+    resetData(state) {
+      state.data = initialState.data;
+    },
   },
   extraReducers: builder => {
     builder.addCase(createQuiz.fulfilled, state => {
       state.data = structuredClone(initialState.data);
+    });
+    builder.addCase(loadQuizById.fulfilled, (state, action) => {
+      state.data = action.payload;
+    });
+    builder.addCase(removeQuizById.fulfilled, state => {
+      state.data = structuredClone(initialState.data);
+    });
+    builder.addCase(loadQuizes.fulfilled, (state, action) => {
+      state.quizes = action.payload;
+    });
+    builder.addCase(updateCorrectAnswersByQuizId.fulfilled, (state, action) => {
+      state.data.correctAnswers = action.payload;
     });
   },
 });
@@ -208,5 +264,6 @@ export const {
   removeAnswer,
   updateAnswer,
   updateAnswerError,
+  resetData,
 } = quizSlice.actions;
 export default quizSlice.reducer;

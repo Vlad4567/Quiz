@@ -6,7 +6,7 @@ import { AnswerForm } from './AnswerForm';
 import basketImg from '../images/icon-basket.svg';
 
 interface Props {
-  type: 'edit';
+  type: 'edit' | 'view';
   question: Question;
   questionIndex: number;
 }
@@ -76,6 +76,34 @@ export const QuestionForm: React.FC<Props> = ({
                   isLast={question.answers.length - 1 === index}
                 />
               ))}
+            </div>
+          </form>
+        </div>
+      );
+
+    case 'view':
+      return (
+        <div className="flex flex-col gap-2">
+          <h2>Question {questionIndex + 1}</h2>
+          <form
+            className="flex flex-col gap-4
+            rounded-2xl border border-icons p-2"
+          >
+            <h5 className="font-bold">{question.text}</h5>
+
+            <div className="flex flex-col gap-2">
+              {question.answers.map(
+                (answer, index) =>
+                  question.answers.length - 1 !== index && (
+                    <AnswerForm
+                      key={answer.id}
+                      answer={answer}
+                      type={type}
+                      question={question}
+                      isLast={question.answers.length - 1 === index}
+                    />
+                  ),
+              )}
             </div>
           </form>
         </div>
